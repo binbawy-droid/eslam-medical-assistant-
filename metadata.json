@@ -1,0 +1,6 @@
+{
+  "name": "Global AI Disease Search & Prescription Analyzer",
+  "description": "AI-powered clinical search engine and prescription analysis platform, featuring global scientific grounding, age-categorized medical guidelines, and multi-specialty dashboards.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
