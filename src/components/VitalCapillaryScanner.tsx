@@ -258,83 +258,76 @@ export default function VitalCapillaryScanner({
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col md:flex-row" id="capillary-ppg-scanner">
       {/* Visual Sensor & Interface Section */}
-      <div className="p-4 md:w-3/5 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col justify-between">
-        <div className="space-y-2">
-          <div className="flex items-center gap-1.5 text-slate-800">
-            <Fingerprint className="w-5 h-5 text-red-500 animate-pulse" />
+      <div className="p-5 md:w-3/5 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col justify-between">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2 text-slate-800">
+            <Fingerprint className="w-5 h-5 text-slate-700" />
             <div>
               <h3 className="text-xs font-bold uppercase tracking-tight text-slate-900 leading-none">
-                Capillary Photoelectric Pulse & Red Cell Measure
+                Capillary Photoplethysmography (PPG) Biometrics
               </h3>
-              <span className="text-[10px] text-slate-400 font-mono uppercase">Photoplethysmography [Sensing Node]</span>
+              <span className="text-[10px] text-slate-400 font-mono">Bedside Optical Sensor · Dual Wavelength (660/940 nm)</span>
             </div>
           </div>
           
           <p className="text-[11px] text-slate-500 leading-relaxed">
-            By exposing the capillary beds of the finger to a combined 660nm (red) and 940nm (infrared) LED ray, we compute vascular pressure waves and estimate exact RBC / oxygen ratios.
+            Acquires peripheral microvascular pulsatile waveforms to calculate instantaneous pulse rate, arterial saturation, and estimate hematologic indices.
           </p>
         </div>
 
         {/* Live PPG Canvas Waveform Graph */}
-        <div className="my-4 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 relative">
+        <div className="my-3.5 bg-slate-950 rounded-xl overflow-hidden border border-slate-800 relative">
           <canvas 
             ref={canvasRef} 
             width={380} 
             height={90} 
             className="w-full h-[90px] block bg-slate-950"
           />
-          <div className="absolute top-2 left-3 flex items-center gap-1.5 text-[8.5px] font-mono text-slate-400 z-10 bg-black/40 px-1.5 py-0.5 rounded">
-            <span className={`w-1.5 h-1.5 rounded-full ${isScanning ? "bg-red-500 animate-ping" : "bg-slate-500"}`} />
-            <span>PPG TRANSMISSION STATUS: {isScanning ? "STREAMING" : "STANDBY"}</span>
+          <div className="absolute top-2 left-3 flex items-center gap-1.5 text-[9px] font-mono text-slate-400 z-10 bg-black/50 px-2 py-0.5 rounded">
+            <span className={`w-1.5 h-1.5 rounded-full ${isScanning ? "bg-emerald-400" : "bg-slate-500"}`} />
+            <span>PPG Acquisition: {isScanning ? "Acquiring..." : "Standby"}</span>
           </div>
 
           {isScanning && (
             <div className="absolute inset-x-0 bottom-0 h-1 bg-slate-800">
               <div 
-                className="h-full bg-red-500 transition-all duration-100 ease-out" 
+                className="h-full bg-blue-500 transition-all duration-100 ease-out" 
                 style={{ width: `${scanProgress}%` }}
               />
             </div>
           )}
         </div>
 
-        {/* The Sensory Fingerprint scan contact zone */}
-        <div className="flex flex-col items-center justify-center p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+        {/* Sensory scan contact zone */}
+        <div className="flex flex-col items-center justify-center p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-2">
           
           <div className="relative">
-            {/* Ambient scanner rings */}
-            <div className={`absolute -inset-2.5 rounded-full opacity-30 transition blur-sm ${
-              isScanning 
-                ? "bg-red-400 animate-pulse scale-105" 
-                : "bg-slate-300 scale-95"
-            }`} />
-
             <button
               onMouseDown={startScan}
               onMouseUp={cancelScanOrRelease}
               onMouseLeave={cancelScanOrRelease}
               onTouchStart={startScan}
               onTouchEnd={cancelScanOrRelease}
-              className={`relative w-16 h-16 rounded-full flex items-center justify-center cursor-pointer transition select-none outline-none ${
+              className={`relative w-14 h-14 rounded-xl flex items-center justify-center cursor-pointer transition select-none outline-none ${
                 isScanning 
-                  ? "bg-red-500 text-white shadow-lg shadow-red-500/20 scale-95" 
+                  ? "bg-blue-600 text-white shadow-xs scale-95" 
                   : scanCompleted 
-                    ? "bg-emerald-600 text-white animate-bounce shadow-md shadow-emerald-600/10"
-                    : "bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white"
+                    ? "bg-slate-900 text-emerald-400 shadow-xs"
+                    : "bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 shadow-2xs"
               }`}
             >
-              <Fingerprint className="w-8 h-8" />
+              <Fingerprint className="w-7 h-7" />
             </button>
           </div>
 
           <div className="text-center">
-            <span className="block text-[10px] font-mono font-bold text-slate-700 tracking-tight">
-              {buttonFeedbackText}
+            <span className="block text-[11px] font-sans font-bold text-slate-800 tracking-tight">
+              {isScanning ? "Maintain steady finger contact..." : scanCompleted ? "Signal Acquired Successfully" : "Press and hold contact sensor"}
             </span>
-            <span className="block text-[9px] text-slate-400">
+            <span className="block text-[10px] text-slate-500">
               {isScanning 
-                ? `Scanning progress: ${Math.floor(scanProgress)}% - Hold firm`
-                : "Continuous mouse-down/touch on pad to activate diagnostic beams"
+                ? `Acquisition progress: ${Math.floor(scanProgress)}%`
+                : "Simulate real-time capillary biometric acquisition for patient file"
               }
             </span>
           </div>
@@ -343,90 +336,82 @@ export default function VitalCapillaryScanner({
       </div>
 
       {/* Vital Telemetry Dossier Commuter Panel */}
-      <div className="p-4 md:w-2/5 bg-slate-50/70 flex flex-col justify-between">
+      <div className="p-5 md:w-2/5 bg-slate-50/50 flex flex-col justify-between">
         <div>
-          <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">
-            Target EMR Vital Statistics ({selectedAgeGroup})
+          <span className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2.5">
+            Calibrated Metrics ({selectedAgeGroup} Cohort)
           </span>
 
           {!readings ? (
             <div className="p-6 border border-dashed border-slate-200 rounded-xl bg-white text-center flex flex-col justify-center items-center min-h-[175px]">
               <Activity className="w-8 h-8 text-slate-300 mb-2" />
-              <p className="text-[11px] font-semibold text-slate-600">No Biometrics Scanned</p>
-              <p className="text-[9px] text-slate-400 mt-0.5 max-w-[170px] leading-normal mx-auto">
-                Press the fingerprint scanner pad on the left to measure real heart bpm, RBC counts, and pressure parameters.
+              <p className="text-xs font-semibold text-slate-700">No Biometrics Recorded</p>
+              <p className="text-[10px] text-slate-400 mt-0.5 max-w-[200px] leading-relaxed mx-auto">
+                Hold the sensor contact pad on the left to capture real-time cardiovascular and red cell indices.
               </p>
             </div>
           ) : (
-            <div className="space-y-2 bg-white p-3 rounded-xl border border-slate-200">
+            <div className="space-y-2 bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-2xs">
               
               {/* Readings Block grid style */}
               <div className="grid grid-cols-2 gap-2 text-slate-800 font-mono">
                 
                 {/* BPM */}
-                <div className="p-2 border border-slate-100 rounded bg-slate-50">
-                  <span className="block text-[8px] text-slate-400 font-sans uppercase">Heart Rate</span>
+                <div className="p-2.5 border border-slate-100 rounded-lg bg-slate-50">
+                  <span className="block text-[9px] text-slate-400 font-sans uppercase font-medium">Heart Rate</span>
                   <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-sm font-extrabold text-slate-900 font-sans">{readings.bpm}</span>
-                    <span className="text-[8px] text-slate-400 font-bold uppercase">BPM</span>
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums">{readings.bpm}</span>
+                    <span className="text-[9px] text-slate-400 font-sans">bpm</span>
                   </div>
-                  <div className="flex items-center gap-1 mt-0.5 text-[8px] text-emerald-600 font-sans">
-                    <Heart className="w-2.5 h-2.5 fill-current animate-pulse text-red-500" />
-                    <span>Sinus Rhythmic</span>
-                  </div>
+                  <span className="text-[9px] text-slate-500 font-sans font-medium block mt-0.5">Sinus rhythm</span>
                 </div>
 
                 {/* SpO2 */}
-                <div className="p-2 border border-slate-100 rounded bg-slate-50">
-                  <span className="block text-[8px] text-slate-400 font-sans uppercase">Oxygen rate</span>
+                <div className="p-2.5 border border-slate-100 rounded-lg bg-slate-50">
+                  <span className="block text-[9px] text-slate-400 font-sans uppercase font-medium">Oxygen Sat</span>
                   <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-sm font-extrabold text-blue-600 font-sans">{readings.spo2}%</span>
-                    <span className="text-[8px] text-slate-400 font-bold uppercase">SpO₂</span>
+                    <span className="text-base font-bold text-blue-700 font-mono tabular-nums">{readings.spo2}%</span>
+                    <span className="text-[9px] text-slate-400 font-sans">SpO₂</span>
                   </div>
-                  <div className="flex items-center gap-0.5 text-[8px] text-[10px] font-sans font-bold leading-none mt-0.5 text-blue-500">
-                    <Zap className="w-2.5 h-2.5 fill-current" />
-                    <span>Hemoglobin Sat</span>
-                  </div>
+                  <span className="text-[9px] text-slate-500 font-sans font-medium block mt-0.5">Adequate</span>
                 </div>
 
                 {/* Pressure / Blood Pres */}
-                <div className="p-2 border border-slate-100 rounded bg-slate-50 col-span-2">
-                  <span className="block text-[8px] text-slate-400 font-sans uppercase">Arterial Blood Pressure</span>
+                <div className="p-2.5 border border-slate-100 rounded-lg bg-slate-50 col-span-2">
+                  <span className="block text-[9px] text-slate-400 font-sans uppercase font-medium">Blood Pressure</span>
                   <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-sm font-extrabold text-slate-900 font-sans">
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums">
                       {readings.bpSystolic} / {readings.bpDiastolic}
                     </span>
-                    <span className="text-[8px] text-slate-400 font-bold uppercase">mmHg</span>
+                    <span className="text-[9px] text-slate-400 font-sans">mmHg</span>
                   </div>
-                  <span className="text-[8.5px] block font-sans text-slate-500 leading-normal mt-0.5">
+                  <span className="text-[9px] block font-sans text-slate-500 leading-normal mt-0.5">
                     Mean Arterial: {Math.floor((readings.bpSystolic + 2 * readings.bpDiastolic) / 3)} mmHg
                   </span>
                 </div>
 
                 {/* RBC Measure */}
-                <div className="p-2 border border-slate-100 rounded bg-slate-50">
-                  <span className="block text-[8px] text-slate-400 font-sans uppercase">RBC Count</span>
+                <div className="p-2.5 border border-slate-100 rounded-lg bg-slate-50">
+                  <span className="block text-[9px] text-slate-400 font-sans uppercase font-medium">RBC Count</span>
                   <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-sm font-extrabold text-slate-900 font-sans">{readings.rbcCount}</span>
-                    <span className="text-[8px] text-slate-400 font-bold leading-none">M/µL</span>
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums">{readings.rbcCount}</span>
+                    <span className="text-[9px] text-slate-400 font-sans">M/µL</span>
                   </div>
-                  <span className="text-[8px] block font-sans text-slate-500 font-semibold truncate">Erythrocytes</span>
                 </div>
 
                 {/* Hemoglobin */}
-                <div className="p-2 border border-slate-100 rounded bg-slate-50">
-                  <span className="block text-[8px] text-slate-400 font-sans uppercase">Hemoglobin (Hb)</span>
+                <div className="p-2.5 border border-slate-100 rounded-lg bg-slate-50">
+                  <span className="block text-[9px] text-slate-400 font-sans uppercase font-medium">Hemoglobin</span>
                   <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-sm font-extrabold text-slate-900 font-sans">{readings.hemoglobin}</span>
-                    <span className="text-[8px] text-slate-400 font-bold leading-none">g/dL</span>
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums">{readings.hemoglobin}</span>
+                    <span className="text-[9px] text-slate-400 font-sans">g/dL</span>
                   </div>
-                  <span className="text-[8px] block font-sans text-slate-500 font-semibold truncate">Spectroscopy Ray</span>
                 </div>
 
               </div>
               
-              <div className="mt-2 text-[9px] text-slate-400 flex justify-between items-center text-right font-mono border-t border-slate-100 pt-1.5">
-                <span>Scanned At:</span>
+              <div className="text-[10px] text-slate-400 flex justify-between items-center font-mono border-t border-slate-100 pt-2">
+                <span>Timestamp:</span>
                 <span className="text-slate-700">{readings.scannedAt}</span>
               </div>
             </div>
@@ -438,28 +423,28 @@ export default function VitalCapillaryScanner({
             <button
               onClick={commitToEMR}
               disabled={isSaved}
-              className={`w-full py-2 px-3 rounded-lg text-[11px] font-bold tracking-tight transition flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`w-full py-2 px-3 rounded-lg text-xs font-semibold tracking-tight transition flex items-center justify-center gap-1.5 cursor-pointer ${
                 isSaved 
-                  ? "bg-emerald-50 text-emerald-700 border border-emerald-250 cursor-default"
-                  : "bg-slate-900 text-white hover:bg-slate-800"
+                  ? "bg-slate-100 text-slate-600 border border-slate-200 cursor-default"
+                  : "bg-slate-900 text-white hover:bg-slate-800 shadow-xs"
               }`}
             >
               {isSaved ? (
                 <>
                   <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>COMMITTED TO EMR DOSSIER FILE</span>
+                  <span>Vitals Synchronized with Patient File</span>
                 </>
               ) : (
                 <>
                   <Save className="w-3.5 h-3.5" />
-                  <span>COMMIT READINGS TO ACTIVE EMR</span>
+                  <span>Commit Biometrics to Case File</span>
                 </>
               )}
             </button>
           ) : (
-            <div className="bg-blue-50 border border-blue-100 p-2 text-[9px] text-blue-800 rounded-lg flex items-start gap-1">
-              <Compass className="w-3 h-3 text-blue-500 shrink-0 mt-0.5" />
-              <span>Grounded calibrations configured automatically for {selectedAgeGroup} patient profile characteristics.</span>
+            <div className="bg-slate-100 border border-slate-200 p-2 text-[10px] text-slate-600 rounded-lg flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+              <span>Calibrated for {selectedAgeGroup} clinical physiological ranges.</span>
             </div>
           )}
         </div>

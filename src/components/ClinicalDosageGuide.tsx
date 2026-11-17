@@ -128,29 +128,31 @@ export default function ClinicalDosageGuide({
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden" id="clinical-dosage-guide">
+    <div className="bg-white border border-slate-200/90 rounded-xl shadow-xs overflow-hidden" id="clinical-dosage-guide">
       {/* Header Banner */}
-      <div className="p-4 bg-slate-900 text-white flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <Calculator className="w-5 h-5 text-blue-400" />
+      <div className="p-4 bg-slate-900 text-white flex flex-wrap justify-between items-center gap-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-slate-800 text-blue-400 rounded-lg">
+            <Calculator className="w-5 h-5" />
+          </div>
           <div>
-            <h3 className="font-sans font-bold text-sm tracking-tight text-white uppercase flex items-center gap-2">
-              Clinical Dosage Manual & Safety Clearance Controls
+            <h3 className="font-sans font-bold text-sm tracking-tight text-white flex items-center gap-2">
+              Clinical Dosage & Clearance Manual
             </h3>
-            <p className="text-[10px] text-slate-400 font-mono">
-              PRECISE CRITERIA FOR BABIES TO 100 YR OLD GERIATRIC CONTEXTS
+            <p className="text-[11px] text-slate-400">
+              Age-cohort calibrated dosing rules, renal excretion adjustments, and Beers criteria precautions
             </p>
           </div>
         </div>
-        <span className="text-[10px] font-mono bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded uppercase">
+        <span className="text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700 px-2 py-0.5 rounded">
           WHO / ACC / ASCO Consensus Verified
         </span>
       </div>
 
       {/* Specialty Grid Selection Header */}
       <div className="p-4 border-b border-slate-200 bg-slate-50/50">
-        <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2.5">
-          Select Basic Health Career Section
+        <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+          Select Specialty Track
         </span>
         <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-9 gap-2">
           {sectors.map((s) => {
@@ -160,17 +162,17 @@ export default function ClinicalDosageGuide({
               <button
                 key={s.specialty}
                 onClick={() => setSelectedSpecialty(s.specialty)}
-                className={`p-2 rounded-xl border text-left flex flex-col justify-between transition cursor-pointer min-h-[64px] ${
+                className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition cursor-pointer min-h-[68px] ${
                   isSelected 
-                    ? "border-blue-500 bg-blue-50/70 shadow-sm"
-                    : "border-slate-200 hover:border-slate-300 bg-white"
+                    ? "border-slate-900 bg-white shadow-xs"
+                    : "border-slate-200/80 hover:border-slate-300 bg-white/70"
                 }`}
               >
                 <div className={`p-1 rounded-lg w-fit ${s.color}`}>
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <span className="block text-[11px] font-extrabold text-slate-800 leading-none truncate pr-1">
+                  <span className="block text-xs font-bold text-slate-900 leading-none truncate pr-1">
                     {s.specialty}
                   </span>
                   <span className="block text-[8px] text-slate-400 truncate mt-0.5">

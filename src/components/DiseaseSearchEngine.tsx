@@ -395,15 +395,15 @@ function cleanErrorMessage(raw: string): string {
   return (
     <div className="space-y-4" id="disease-engine-card">
       
-      {/* Search Input Card Frame in Light Theme */}
-      <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg border border-blue-100">
-            <Compass className="w-4 h-4" />
+      {/* Search Input Card Frame in Modern Clinical Theme */}
+      <div className="bg-white border border-slate-200/90 p-5 rounded-xl shadow-xs">
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="p-2 bg-slate-100 text-slate-800 rounded-lg border border-slate-200/80">
+            <Search className="w-4 h-4 text-slate-700" />
           </div>
           <div>
-            <h3 className="font-sans font-bold text-sm text-slate-800">Global Clinical Search Grounding</h3>
-            <p className="text-[11px] text-slate-500">Real-time access to WHO, CDC, PubMed registry, and active multi-specialty servers</p>
+            <h3 className="font-sans font-bold text-sm text-slate-900 tracking-tight">Clinical Diagnostic Search</h3>
+            <p className="text-[11px] text-slate-500">Query condition etiology, pathogenesis, objective markers, and verified therapeutics</p>
           </div>
         </div>
 
@@ -414,10 +414,10 @@ function cleanErrorMessage(raw: string): string {
               <input
                 type="text"
                 required
-                placeholder="Query global disease indexes (e.g., Atrial Fibrillation, Infant West Syndrome...)"
+                placeholder="Search medical conditions (e.g., Atrial Fibrillation, Infantile Spasms, Diabetic Nephropathy)..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-900 placeholder-slate-400 outline-none transition"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-900 placeholder-slate-400 outline-none transition"
               />
             </div>
             
@@ -425,76 +425,83 @@ function cleanErrorMessage(raw: string): string {
               type="submit"
               disabled={loading}
               id="btn-disease-search"
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 self-stretch transition shadow-sm disabled:opacity-50 cursor-pointer"
+              className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 self-stretch transition shadow-xs disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <>
                   <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                  Sourcing Planetary Nodes...
+                  Accessing Evidence Base...
                 </>
               ) : (
                 <>
                   <Search className="w-3.5 h-3.5" />
-                  Request Dossier
+                  Generate Dossier
                 </>
               )}
             </button>
           </div>
 
           {/* Specialization & Age Quick Filters synced indicator */}
-          <div className="flex items-center justify-between text-[11px] bg-slate-50 border border-slate-100 p-2 rounded-lg">
-            <span className="text-slate-500 font-medium font-sans">
-              Filters: <strong className="text-slate-800 font-semibold">{activeSpecialty} Focus</strong> • <strong className="text-slate-800 font-semibold">{activeAgeGroup}</strong> cohort
+          <div className="flex items-center justify-between text-xs bg-slate-50 border border-slate-200/70 p-2.5 rounded-lg">
+            <span className="text-slate-600 font-medium">
+              Active Context: <strong className="text-slate-900 font-semibold">{activeSpecialty}</strong> · <strong className="text-slate-900 font-semibold">{activeAgeGroup}</strong> cohort
             </span>
-            <span className="text-[10px] text-blue-600 font-semibold uppercase hover:underline cursor-pointer" onClick={() => triggerSearch(query || "General Health", activeAgeGroup, activeSpecialty)}>
-              Force Sync
-            </span>
+            <button
+              type="button"
+              className="text-[11px] text-blue-700 hover:text-blue-900 font-semibold cursor-pointer" 
+              onClick={() => triggerSearch(query || "General Health", activeAgeGroup, activeSpecialty)}
+            >
+              Refresh Match
+            </button>
           </div>
         </form>
       </div>
 
-      {/* Specialty Preset Lists grouped under High Density panels */}
-      <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
-        <div className="flex items-center gap-1.5 mb-2.5 border-b border-slate-100 pb-2">
-          <BookOpen className="w-3.5 h-3.5 text-slate-500" />
-          <h4 className="font-sans font-bold text-xs text-slate-700 uppercase tracking-tight">
-            Comprehensive Life-Cycle Clinical Presets
-          </h4>
+      {/* Specialty Preset Lists grouped under Clinical Panels */}
+      <div className="bg-white border border-slate-200/90 p-4 rounded-xl shadow-xs">
+        <div className="flex items-center justify-between gap-1.5 mb-3 border-b border-slate-100 pb-2.5">
+          <div className="flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-slate-600" />
+            <h4 className="font-sans font-bold text-xs text-slate-800 uppercase tracking-tight">
+              Curated Clinical Practice Presets
+            </h4>
+          </div>
+          <span className="text-[10px] text-slate-400 font-medium">10 Specialties · All Life Stages</span>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
           {(['Cardiology', 'Neurology', 'Hematology', 'Pediatrics', 'Geriatrics', 'Oncology', 'Nephrology', 'Endocrinology', 'Immunology', 'General'] as MedicalSpecialty[]).map((spec) => {
             const list = PRESET_DISEASES.filter(d => d.category === spec);
             return (
-              <div key={spec} className="bg-slate-50/50 p-2.5 rounded-lg border border-slate-200/50 space-y-1">
-                <div className="flex items-center gap-1.5 mb-1 pb-1 border-b border-slate-200/60 font-medium">
-                  {spec === 'Cardiology' && <Heart className="w-3 h-3 text-red-500" />}
-                  {spec === 'Neurology' && <Brain className="w-3 h-3 text-purple-500" />}
-                  {spec === 'Hematology' && <Activity className="w-3 h-3 text-emerald-500" />}
-                  {spec === 'Pediatrics' && <Baby className="w-3 h-3 text-indigo-500" />}
-                  {spec === 'Geriatrics' && <User className="w-3 h-3 text-teal-500" />}
-                  {spec === 'Oncology' && <Sparkles className="w-3 h-3 text-rose-500" />}
-                  {spec === 'Nephrology' && <Compass className="w-3 h-3 text-sky-500" />}
-                  {spec === 'Endocrinology' && <Compass className="w-3 h-3 text-amber-500" />}
-                  {spec === 'Immunology' && <Compass className="w-3 h-3 text-fuchsia-500" />}
-                  {spec === 'General' && <Stethoscope className="w-3 h-3 text-blue-500" />}
-                  <span className="text-[10px] font-bold text-slate-700 tracking-tight uppercase">{spec} Nodes</span>
+              <div key={spec} className="bg-slate-50/70 p-2.5 rounded-lg border border-slate-200/80 space-y-1.5">
+                <div className="flex items-center gap-1.5 pb-1 border-b border-slate-200/70 font-medium">
+                  {spec === 'Cardiology' && <Heart className="w-3.5 h-3.5 text-rose-600" />}
+                  {spec === 'Neurology' && <Brain className="w-3.5 h-3.5 text-violet-600" />}
+                  {spec === 'Hematology' && <Activity className="w-3.5 h-3.5 text-emerald-600" />}
+                  {spec === 'Pediatrics' && <Baby className="w-3.5 h-3.5 text-indigo-600" />}
+                  {spec === 'Geriatrics' && <User className="w-3.5 h-3.5 text-teal-600" />}
+                  {spec === 'Oncology' && <Sparkles className="w-3.5 h-3.5 text-amber-600" />}
+                  {spec === 'Nephrology' && <Compass className="w-3.5 h-3.5 text-sky-600" />}
+                  {spec === 'Endocrinology' && <Compass className="w-3.5 h-3.5 text-amber-600" />}
+                  {spec === 'Immunology' && <Compass className="w-3.5 h-3.5 text-fuchsia-600" />}
+                  {spec === 'General' && <Stethoscope className="w-3.5 h-3.5 text-blue-600" />}
+                  <span className="text-[11px] font-bold text-slate-800 tracking-tight">{spec}</span>
                 </div>
                 <div className="space-y-1">
                   {list.map((d) => (
                     <button
                       key={d.name}
                       onClick={() => selectPreset(d.name, d.category, d.ageGroup)}
-                      className="w-full text-left p-1 text-[10px] text-slate-500 hover:text-blue-700 hover:bg-slate-100/85 rounded transition-all flex justify-between items-center cursor-pointer"
+                      className="w-full text-left p-1.5 text-xs text-slate-600 hover:text-slate-900 hover:bg-white rounded transition flex justify-between items-center cursor-pointer border border-transparent hover:border-slate-200/70"
                     >
-                      <span className="font-semibold truncate max-w-[120px]" title={d.name}>{d.name}</span>
-                      <span className="font-mono text-[8px] text-slate-400 bg-white/80 border border-slate-200 rounded px-1 scale-90">
+                      <span className="font-medium truncate max-w-[110px]" title={d.name}>{d.name}</span>
+                      <span className="text-[9px] text-slate-500 font-mono">
                         {d.ageGroup}
                       </span>
                     </button>
                   ))}
                   {list.length === 0 && (
-                    <span className="text-[9px] text-slate-400 italic block">No preset cache loaded</span>
+                    <span className="text-[10px] text-slate-400 italic block py-1">No items</span>
                   )}
                 </div>
               </div>
@@ -577,42 +584,43 @@ function cleanErrorMessage(raw: string): string {
 
             {/* 1. Authoritative Clinical Profile & Prescription Card (Causes, Signs, Symptoms, Prescriptions) */}
             {localMatch && (
-              <div className="bg-slate-900 text-slate-100 rounded-xl border border-slate-950 shadow-md p-5 space-y-4" id="authoritative-registry-card">
-                <div className="flex justify-between items-start border-b border-slate-800 pb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-rose-500/10 text-rose-400 rounded-lg border border-rose-500/20">
+              <div className="bg-white text-slate-900 rounded-xl border border-slate-200/90 shadow-xs p-6 space-y-5" id="authoritative-registry-card">
+                <div className="flex flex-wrap justify-between items-start border-b border-slate-100 pb-4 gap-2">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-slate-900 text-white rounded-lg">
                       <ShieldCheck className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[9px] font-mono bg-blue-500/20 text-blue-300 border border-blue-500/30 px-1.5 py-0.5 rounded uppercase">
-                          Authoritative EMR Sheet
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">
+                          ICD Reference Profile
                         </span>
-                        <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded uppercase">
-                          Match: {localMatch.category} {localMatch.ageGroup}
+                        <span className="text-slate-300">·</span>
+                        <span className="text-xs font-semibold text-slate-500">
+                          {localMatch.category} · {localMatch.ageGroup} Cohort
                         </span>
                       </div>
-                      <h3 className="font-sans font-extrabold text-sm text-white mt-1">
-                        Professional Disease Profile: {localMatch.name}
+                      <h3 className="font-sans font-bold text-base text-slate-900 mt-1 tracking-tight">
+                        {localMatch.name}
                       </h3>
                     </div>
                   </div>
-                  <span className="text-[10px] text-slate-400 font-mono tracking-wider">REGISTRY V-4.5</span>
+                  <span className="text-[10px] text-slate-400 font-mono">Consensus Monograph</span>
                 </div>
 
                 {/* Grid layout for Causes, Signs, Symptoms */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px] leading-relaxed">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs leading-relaxed">
                   
                   {/* Causes (Pathogenesis) Section */}
-                  <div className="bg-slate-950/40 p-3 rounded-lg border border-slate-800 space-y-2">
-                    <h4 className="font-bold text-slate-300 uppercase tracking-tight flex items-center gap-1.5 pb-1 border-b border-slate-800">
-                      <Info className="w-3.5 h-3.5 text-blue-400" />
-                      Causes & Etiologic Factors
+                  <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200/70 space-y-2">
+                    <h4 className="font-bold text-slate-900 text-xs flex items-center gap-1.5 pb-1.5 border-b border-slate-200/60">
+                      <Info className="w-3.5 h-3.5 text-blue-600" />
+                      Etiology & Pathogenesis
                     </h4>
-                    <ul className="space-y-1.5 text-slate-400 list-none pl-0">
+                    <ul className="space-y-1.5 text-slate-600 list-none pl-0">
                       {localMatch.causes.map((cause, i) => (
-                        <li key={i} className="relative pl-3.5">
-                          <span className="absolute left-0 text-blue-400 font-sans">•</span>
+                        <li key={i} className="relative pl-3">
+                          <span className="absolute left-0 text-slate-400 font-bold">•</span>
                           {cause}
                         </li>
                       ))}
@@ -620,15 +628,15 @@ function cleanErrorMessage(raw: string): string {
                   </div>
 
                   {/* Signs Section (Objective) */}
-                  <div className="bg-slate-950/40 p-3 rounded-lg border border-slate-800 space-y-2">
-                    <h4 className="font-bold text-slate-300 uppercase tracking-tight flex items-center gap-1.5 pb-1 border-b border-slate-800">
-                      <Activity className="w-3.5 h-3.5 text-amber-400" />
-                      Clinical Signs (Objective)
+                  <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200/70 space-y-2">
+                    <h4 className="font-bold text-slate-900 text-xs flex items-center gap-1.5 pb-1.5 border-b border-slate-200/60">
+                      <Activity className="w-3.5 h-3.5 text-amber-600" />
+                      Objective Clinical Signs
                     </h4>
-                    <ul className="space-y-1.5 text-slate-400 list-none pl-0">
+                    <ul className="space-y-1.5 text-slate-600 list-none pl-0">
                       {localMatch.signs.map((sign, i) => (
-                        <li key={i} className="relative pl-3.5">
-                          <span className="absolute left-0 text-amber-400 font-sans">•</span>
+                        <li key={i} className="relative pl-3">
+                          <span className="absolute left-0 text-slate-400 font-bold">•</span>
                           {sign}
                         </li>
                       ))}
@@ -636,15 +644,15 @@ function cleanErrorMessage(raw: string): string {
                   </div>
 
                   {/* Symptoms Section (Subjective) */}
-                  <div className="bg-slate-950/40 p-3 rounded-lg border border-slate-800 space-y-2">
-                    <h4 className="font-bold text-slate-300 uppercase tracking-tight flex items-center gap-1.5 pb-1 border-b border-slate-800">
-                      <User className="w-3.5 h-3.5 text-purple-400" />
-                      Symptoms (Subjective)
+                  <div className="bg-slate-50/70 p-3.5 rounded-xl border border-slate-200/70 space-y-2">
+                    <h4 className="font-bold text-slate-900 text-xs flex items-center gap-1.5 pb-1.5 border-b border-slate-200/60">
+                      <User className="w-3.5 h-3.5 text-indigo-600" />
+                      Subjective Patient Symptoms
                     </h4>
-                    <ul className="space-y-1.5 text-slate-400 list-none pl-0">
+                    <ul className="space-y-1.5 text-slate-600 list-none pl-0">
                       {localMatch.symptoms.map((sym, i) => (
-                        <li key={i} className="relative pl-3.5">
-                          <span className="absolute left-0 text-purple-400 font-sans">•</span>
+                        <li key={i} className="relative pl-3">
+                          <span className="absolute left-0 text-slate-400 font-bold">•</span>
                           {sym}
                         </li>
                       ))}
@@ -654,46 +662,49 @@ function cleanErrorMessage(raw: string): string {
                 </div>
 
                 {/* Immediate Clinical Prescription & Dosages Section */}
-                <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
-                  <div className="flex items-center gap-1.5 pb-1.5 border-b border-slate-850">
-                    <Pill className="w-4 h-4 text-emerald-400" />
-                    <h4 className="font-sans font-bold text-xs uppercase text-emerald-300 tracking-wide">
-                      Immediate Prescriptions & Dynamic Directives
-                    </h4>
+                <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-4 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-200/70">
+                    <div className="flex items-center gap-2">
+                      <Pill className="w-4 h-4 text-emerald-600" />
+                      <h4 className="font-sans font-bold text-xs text-slate-900 tracking-tight">
+                        First-Line Pharmacotherapy & Dosage Protocols
+                      </h4>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-medium">WHO Model List Aligned</span>
                   </div>
 
-                  <div className="space-y-3 text-[11px]">
+                  <div className="space-y-2.5 text-xs">
                     {localMatch.prescriptions.map((p, idx) => (
-                      <div key={idx} className="p-3 bg-slate-900/60 border border-slate-800/80 rounded-lg space-y-2">
+                      <div key={idx} className="p-3.5 bg-white border border-slate-200 rounded-lg space-y-2 shadow-2xs">
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          <div>
-                            <span className="font-extrabold text-white text-xs mr-2">{p.medicine}</span>
-                            <span className="text-[10px] text-slate-400 italic">({p.genericName})</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-900 text-xs">{p.medicine}</span>
+                            <span className="text-slate-400 text-xs font-mono">({p.genericName})</span>
                           </div>
-                          <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-mono rounded">
-                            Standard Starting Admin
+                          <span className="px-2 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-mono rounded">
+                            Standard Starting Regimen
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 py-1.5 border-t border-b border-slate-800 text-slate-300 font-mono text-[10px]">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 py-2 border-t border-b border-slate-100 text-slate-700 font-mono text-[11px]">
                           <div>
-                            <span className="text-slate-500 font-sans block text-[9px] uppercase">Dosage Strength:</span>
-                            <span className="text-white font-semibold">{p.standardDose}</span>
+                            <span className="text-slate-400 font-sans block text-[9px] uppercase font-medium">Target Dose</span>
+                            <span className="text-slate-900 font-semibold">{p.standardDose}</span>
                           </div>
                           <div>
-                            <span className="text-slate-500 font-sans block text-[9px] uppercase">Frequency:</span>
-                            <span className="text-white font-semibold">{p.frequency}</span>
+                            <span className="text-slate-400 font-sans block text-[9px] uppercase font-medium">Frequency</span>
+                            <span className="text-slate-900 font-semibold">{p.frequency}</span>
                           </div>
                           <div>
-                            <span className="text-slate-500 font-sans block text-[9px] uppercase">Recommended Duration:</span>
-                            <span className="text-white font-semibold">{p.duration}</span>
+                            <span className="text-slate-400 font-sans block text-[9px] uppercase font-medium">Treatment Course</span>
+                            <span className="text-slate-900 font-semibold">{p.duration}</span>
                           </div>
                         </div>
 
-                        <div className="flex gap-1 bg-red-500/5 p-2 rounded border border-red-500/10 text-[10px]">
-                          <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0 mt-0.5" />
-                          <p className="text-slate-400 font-sans">
-                            <strong className="text-red-300">Vigilance instruction: </strong> {p.clinicalNote}
+                        <div className="p-2 bg-amber-50/60 rounded border border-amber-200/60 text-[11px] text-amber-900 flex gap-1.5 items-start">
+                          <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                          <p className="leading-relaxed">
+                            <strong className="font-semibold text-amber-950">Safety Precaution: </strong> {p.clinicalNote}
                           </p>
                         </div>
                       </div>
@@ -703,27 +714,28 @@ function cleanErrorMessage(raw: string): string {
               </div>
             )}
 
-            {/* 2. Earth-Consensus Grounding AI Whitepaper Dossier */}
-            <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden text-left" id="dossier-output">
+            {/* 2. Comprehensive Clinical Evidence Dossier */}
+            <div className="bg-white border border-slate-200/90 rounded-xl shadow-xs overflow-hidden text-left" id="dossier-output">
               {/* Dossier Header */}
               <div className="bg-slate-50 p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-1.5 mb-1 text-[9px] font-mono font-bold">
-                    <span className="bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded uppercase">
-                      {clinicalSheet.category} SPECIALIZATION
+                  <div className="flex items-center gap-2 mb-1 text-[10px] font-mono font-medium">
+                    <span className="bg-slate-200/70 text-slate-800 px-2 py-0.5 rounded">
+                      {clinicalSheet.category}
                     </span>
-                    <span className="bg-slate-200 text-slate-700 border border-slate-300 px-1.5 py-0.5 rounded uppercase">
-                      ACTIVE COHORT: {clinicalSheet.ageGroup}
+                    <span className="text-slate-300">·</span>
+                    <span className="text-slate-600 font-sans">
+                      Target Cohort: {clinicalSheet.ageGroup}
                     </span>
                   </div>
                   <h3 className="font-sans font-bold text-sm text-slate-900 leading-tight">
-                    Earth-Grounding Search Synthesis: {clinicalSheet.name}
+                    Evidence Synthesis: {clinicalSheet.name}
                   </h3>
                 </div>
                 <div className="sm:text-right shrink-0">
-                  <span className="text-[9px] font-mono text-slate-400 block uppercase">Planetary Grounding Timestamp</span>
-                  <span className="text-[10px] text-slate-600 font-sans block font-semibold">
-                    {new Date(clinicalSheet.timestamp).toLocaleTimeString()} (Active Cache)
+                  <span className="text-[10px] text-slate-400 block font-mono">Retrieved Record</span>
+                  <span className="text-xs text-slate-700 font-sans block font-medium">
+                    {new Date(clinicalSheet.timestamp).toLocaleTimeString()}
                   </span>
                 </div>
               </div>
@@ -736,9 +748,9 @@ function cleanErrorMessage(raw: string): string {
               {/* Grounding web sources */}
               {clinicalSheet.groundingSources.length > 0 && (
                 <div className="bg-slate-50/70 p-4">
-                  <h4 className="font-sans font-bold text-[10px] text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-1">
-                    <ExternalLink className="w-3 h-3 text-blue-600" />
-                    Planetary Resource Citations
+                  <h4 className="font-sans font-bold text-[10px] text-slate-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                    <ExternalLink className="w-3.5 h-3.5 text-blue-600" />
+                    Regulatory & Literature Citations
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {clinicalSheet.groundingSources.slice(0, 4).map((source, i) => (
@@ -747,14 +759,14 @@ function cleanErrorMessage(raw: string): string {
                         href={source.uri}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 bg-white border border-slate-200 hover:border-blue-400 rounded-lg flex items-start gap-2 transition group"
+                        className="p-2.5 bg-white border border-slate-200 hover:border-slate-400 rounded-lg flex items-start gap-2.5 transition group"
                       >
-                        <BookOpen className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 shrink-0 mt-0.5" />
+                        <BookOpen className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 shrink-0 mt-0.5" />
                         <div className="min-w-0 flex-1">
-                          <span className="text-[10px] font-bold text-slate-700 group-hover:text-blue-700 block truncate transition-colors">
+                          <span className="text-xs font-semibold text-slate-800 group-hover:text-blue-700 block truncate transition-colors">
                             {source.title}
                           </span>
-                          <span className="text-[8.5px] font-mono text-slate-400 block truncate group-hover:text-blue-500 transition-colors">
+                          <span className="text-[10px] font-mono text-slate-400 block truncate">
                             {source.uri}
                           </span>
                         </div>
@@ -765,23 +777,23 @@ function cleanErrorMessage(raw: string): string {
               )}
             </div>
 
-            {/* 3. Interactive AI Clinical Consultant Q&A Box */}
-            <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden text-left" id="dossier-interactive-chat">
+            {/* 3. Interactive Clinical Case Consultation Desk */}
+            <div className="bg-white border border-slate-200/90 rounded-xl shadow-xs overflow-hidden text-left" id="dossier-interactive-chat">
               
               {/* Box Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 bg-white/15 rounded-lg">
-                    <Bot className="w-4 h-4 text-sky-200" />
+              <div className="bg-slate-900 text-white p-4 flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg">
+                    <Stethoscope className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="font-sans font-bold text-xs">Dr. SSEMAMBO DEHIA Consultation Suite</h3>
-                    <p className="text-[10px] text-sky-100 opacity-90">AI General Medical Director • Synchronized with planetary consensus servers</p>
+                    <h3 className="font-sans font-bold text-xs">Dr. Ssemambo Dehia · Case Consultation</h3>
+                    <p className="text-[11px] text-slate-400">Diagnostic reasoning & targeted pharmacology review</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5 bg-black/10 px-2 py-0.5 rounded text-[8.5px] font-mono">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>SSEMAMBO ACTIVE</span>
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-sans font-medium text-slate-300">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>Active File</span>
                 </div>
               </div>
 
@@ -789,10 +801,7 @@ function cleanErrorMessage(raw: string): string {
               <div className="p-4 bg-slate-50/50 space-y-3 max-h-[300px] overflow-y-auto border-b border-slate-100" id="chat-messages-scroll-area">
                 {chatMessages.map((msg, i) => (
                   <div key={i} className={`flex gap-2.5 max-w-[85%] ${msg.role === 'user' ? 'ml-auto flex-row-reverse text-right' : 'mr-auto text-left'}`}>
-                    <div className={`p-1 mt-0.5 rounded-md shrink-0 h-6 w-6 flex items-center justify-center ${msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'}`}>
-                      {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
-                    </div>
-                    <div className={`rounded-xl p-3 text-xs leading-relaxed ${msg.role === 'user' ? 'bg-blue-600 text-slate-50 text-left' : 'bg-white border border-slate-200 shadow-sm'}`}>
+                    <div className={`rounded-xl p-3 text-xs leading-relaxed ${msg.role === 'user' ? 'bg-slate-900 text-white text-left' : 'bg-white border border-slate-200 shadow-2xs'}`}>
                       {msg.role === 'user' ? (
                         <p className="font-medium">{msg.text}</p>
                       ) : (
@@ -805,12 +814,10 @@ function cleanErrorMessage(raw: string): string {
                 ))}
                 
                 {chatLoading && (
-                  <div className="flex gap-2.5 max-w-[85%] mr-auto text-left animate-pulse">
-                    <div className="p-1 mt-0.5 rounded bg-slate-200 text-slate-500 shrink-0 h-6 w-6 flex items-center justify-center">
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    </div>
-                    <div className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-400">
-                      Synthesizing biochemical pathways and active guidelines...
+                  <div className="flex gap-2 max-w-[85%] mr-auto text-left">
+                    <div className="bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-500 italic flex items-center gap-2">
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin text-slate-600" />
+                      Evaluating clinical guidelines and case parameters...
                     </div>
                   </div>
                 )}
@@ -824,39 +831,39 @@ function cleanErrorMessage(raw: string): string {
               </div>
 
               {/* Suggestion Chips */}
-              <div className="p-3 bg-white border-b border-slate-100 flex flex-wrap gap-1.5">
+              <div className="p-2.5 bg-white border-b border-slate-100 flex flex-wrap gap-1.5">
                 <button
                   type="button"
                   onClick={() => handleSendChatMessage(undefined, `Explain standard clinical signs or emergency thresholds to note for ${clinicalSheet.name}.`)}
                   disabled={chatLoading}
-                  className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[10px] text-slate-600 font-semibold rounded-full cursor-pointer transition"
+                  className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[10px] text-slate-700 font-medium rounded-md cursor-pointer transition shadow-2xs"
                 >
-                  ⚠️ Signs & Safety Benchmarks
+                  Emergency Thresholds & Warning Signs
                 </button>
                 <button
                   type="button"
                   onClick={() => handleSendChatMessage(undefined, `What triggers or etiologic risk factors affect the ${clinicalSheet.ageGroup} group regarding ${clinicalSheet.name}?`)}
                   disabled={chatLoading}
-                  className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[10px] text-slate-600 font-semibold rounded-full cursor-pointer transition"
+                  className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[10px] text-slate-700 font-medium rounded-md cursor-pointer transition shadow-2xs"
                 >
-                  👶 Age Vulnerability Factors
+                  Age Vulnerability & Triggers
                 </button>
                 <button
                   type="button"
                   onClick={() => handleSendChatMessage(undefined, `Detail standard medication classes, starting doses and Beers-criteria risk points for ${clinicalSheet.name} in this demographic.`)}
                   disabled={chatLoading}
-                  className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[10px] text-slate-600 font-semibold rounded-full cursor-pointer transition"
+                  className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[10px] text-slate-700 font-medium rounded-md cursor-pointer transition shadow-2xs"
                 >
-                  💊 Prescription & Toxicities
+                  Pharmacotherapy & Dosing Strategy
                 </button>
                 {vitals && (
                   <button
                     type="button"
                     onClick={() => handleSendChatMessage(undefined, `CORRELATE MY PATIENT VITALS: How do BPM=${vitals.bpm}, SpO2=${vitals.spo2}%, BP=${vitals.bpSystolic}/${vitals.bpDiastolic}, RBC=${vitals.rbcCount} map to warnings for this condition?`)}
                     disabled={chatLoading}
-                    className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[10px] text-emerald-700 font-bold rounded-full cursor-pointer transition-all animate-pulse"
+                    className="px-2.5 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-300 text-[10px] text-slate-800 font-semibold rounded-md cursor-pointer transition shadow-2xs"
                   >
-                    🩺 Correlate EMR Biometrics
+                    Correlate Patient Vitals ({vitals.bpm} bpm / {vitals.spo2}% SpO₂)
                   </button>
                 )}
               </div>

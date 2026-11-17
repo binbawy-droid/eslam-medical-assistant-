@@ -274,40 +274,58 @@ export default function App() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen flex flex-col font-sans text-slate-900 overflow-hidden" id="applet-primary-container">
+    <div className="bg-slate-50 min-h-screen flex flex-col font-sans text-slate-900 antialiased" id="applet-primary-container">
       
-      {/* Top Clinical Header Bar */}
-      <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 shadow-sm" id="aether-header">
+      {/* Top Bar Contract: Clinical Workspace Header */}
+      <header className="h-16 bg-white border-b border-slate-200/90 flex items-center justify-between px-6 shrink-0 z-30 sticky top-0" id="aether-header">
+        {/* Left: Clinical Wordmark */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold tracking-tight shadow-md">
-            Æ
+          <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-sm tracking-tight shadow-xs">
+            <Activity className="w-4 h-4 text-blue-400" />
           </div>
           <div>
-            <h1 className="text-sm font-extrabold tracking-tight text-slate-800 uppercase flex items-center gap-1.5 leading-none">
-              Aether Health <span className="text-blue-600 block">AI</span>
-            </h1>
-            <span className="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Global Clinical Portal</span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-extrabold tracking-tight text-slate-900">Aether Health</span>
+              <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/80 px-1.5 py-0.5 rounded font-mono">
+                Registry
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 font-medium">Clinical Intelligence & Evidence Registry</p>
           </div>
         </div>
 
-        {/* Dynamic header information display */}
-        <div className="hidden md:flex items-center gap-6 text-xs text-slate-600 border-l border-slate-100 pl-6 flex-1 max-w-xl">
-          <div className="flex items-center gap-1.5">
-            <Server className="w-3.5 h-3.5 text-slate-400" />
-            <span className="text-[10px] font-mono">
-              Cluster Node: <strong className="text-slate-800 font-semibold font-sans">EUR-WEST-PRIME</strong>
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Globe className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
-            <span className="text-[10px] font-mono">
-              Consensus: <strong className="text-slate-800 font-semibold font-sans">WHO + PubMed Grounded</strong>
-            </span>
-          </div>
-        </div>
+        {/* Center: In-page Navigation Anchors */}
+        <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-slate-600 bg-slate-100/70 p-1 rounded-xl border border-slate-200/60">
+          <a href="#dossiers-and-matrix-row" className="px-3 py-1.5 rounded-lg hover:text-slate-950 hover:bg-white transition text-[11px]">
+            Diagnostic Registry
+          </a>
+          <a href="#ssemambo-assistant-dashboard" className="px-3 py-1.5 rounded-lg hover:text-slate-950 hover:bg-white transition text-[11px] text-blue-700">
+            Dr. Ssemambo Consultation
+          </a>
+          <a href="#analytics-grid-row" className="px-3 py-1.5 rounded-lg hover:text-slate-950 hover:bg-white transition text-[11px]">
+            Rx Safety Review
+          </a>
+          <a href="#capillary-scanner-section" className="px-3 py-1.5 rounded-lg hover:text-slate-950 hover:bg-white transition text-[11px]">
+            Biometrics Sensor
+          </a>
+          <a href="#dosage-manual-row" className="px-3 py-1.5 rounded-lg hover:text-slate-950 hover:bg-white transition text-[11px]">
+            Dosage Calculator
+          </a>
+        </nav>
 
-        {/* User Login Section Trigger */}
+        {/* Right: Active Clinician Session & Authentication */}
         <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 text-right">
+            <div>
+              <span className="block text-xs font-bold text-slate-800 leading-tight">
+                {profile?.name || "Attending Clinician"}
+              </span>
+              <span className="block text-[10px] text-slate-500 font-medium">
+                {activeSpecialty} · {activeAgeGroup} Cohort
+              </span>
+            </div>
+          </div>
+
           <LoginModal 
             currentProfile={profile} 
             onLogin={(newProfile) => {
@@ -327,10 +345,10 @@ export default function App() {
             
             {/* Specialization Section */}
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center justify-between">
-                <span>Disease Tracks</span>
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Medical Specialties</span>
                 <ListFilter className="w-3 h-3 text-slate-400" />
-              </p>
+              </div>
               <nav className="space-y-1">
                 {(['Cardiology', 'Hematology', 'Neurology', 'Pediatrics', 'Geriatrics', 'Oncology', 'Nephrology', 'Endocrinology', 'Immunology', 'General'] as MedicalSpecialty[]).map((spec) => {
                   const isActive = activeSpecialty === spec;
@@ -338,27 +356,19 @@ export default function App() {
                     <button
                       key={spec}
                       onClick={() => handleSidebarSpecialtyChange(spec)}
-                      className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-[11px] font-semibold tracking-tight transition ${
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
                         isActive 
-                          ? "bg-blue-50 text-blue-700 border border-blue-105 border-blue-100" 
-                          : "text-slate-600 hover:bg-slate-50/80 hover:text-slate-900"
+                          ? "bg-slate-900 text-white shadow-xs" 
+                          : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <div className={`w-1.5 h-1.5 rounded-full ${
-                          spec === 'Cardiology' ? "bg-red-500" :
-                          spec === 'Hematology' ? "bg-emerald-500" :
-                          spec === 'Neurology' ? "bg-violet-500" :
-                          spec === 'Pediatrics' ? "bg-indigo-500" :
-                          spec === 'Geriatrics' ? "bg-teal-500" :
-                          spec === 'Oncology' ? "bg-rose-500" :
-                          spec === 'Nephrology' ? "bg-sky-500" :
-                          spec === 'Endocrinology' ? "bg-amber-500" :
-                          spec === 'Immunology' ? "bg-fuchsia-500" : "bg-blue-550"
-                        }`} />
+                      <div className="flex items-center gap-2.5">
+                        <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-blue-400" : "bg-slate-300"}`} />
                         <span>{spec}</span>
                       </div>
-                      {isActive && <span className="text-[8px] bg-blue-100 text-blue-700 px-1 rounded font-mono">ON</span>}
+                      {isActive && (
+                        <span className="text-[9px] font-mono font-medium text-slate-300">Active</span>
+                      )}
                     </button>
                   );
                 })}
@@ -367,56 +377,58 @@ export default function App() {
 
             {/* Demographic Cohort Selectors */}
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center justify-between">
-                <span>Demographics (Age Base)</span>
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Patient Demographics</span>
                 <Info className="w-3 h-3 text-slate-400" />
-              </p>
-              <div className="grid grid-cols-2 gap-1.5">
-                {(['Babies', 'Children', 'Teenagers', 'Adults', 'Seniors'] as AgeGroup[]).map((ageGrp) => {
-                  const isActive = activeAgeGroup === ageGrp;
+              </div>
+              <div className="grid grid-cols-1 gap-1.5">
+                {([
+                  { group: 'Babies' as AgeGroup, label: 'Infants & Neonates', range: '0–2 years' },
+                  { group: 'Children' as AgeGroup, label: 'Pediatrics', range: '3–12 years' },
+                  { group: 'Teenagers' as AgeGroup, label: 'Adolescents', range: '13–19 years' },
+                  { group: 'Adults' as AgeGroup, label: 'Adults', range: '20–59 years' },
+                  { group: 'Seniors' as AgeGroup, label: 'Geriatrics', range: '60+ years' }
+                ]).map((cohort) => {
+                  const isActive = activeAgeGroup === cohort.group;
                   return (
                     <button
-                      key={ageGrp}
-                      onClick={() => handleSidebarAgeGroupChange(ageGrp)}
-                      className={`px-2 py-1.5 text-[10px] text-center font-bold border rounded-lg transition ${
+                      key={cohort.group}
+                      onClick={() => handleSidebarAgeGroupChange(cohort.group)}
+                      className={`px-3 py-2 text-left rounded-lg border transition cursor-pointer ${
                         isActive 
-                          ? "bg-slate-900 text-white border-slate-950 shadow-sm" 
-                          : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300"
+                          ? "bg-blue-50/80 border-blue-300 text-blue-900 font-bold" 
+                          : "border-slate-200/80 text-slate-600 hover:bg-slate-50 hover:border-slate-300 font-medium"
                       }`}
                     >
-                      {ageGrp}
-                      <span className="block text-[8px] opacity-60 font-mono font-normal">
-                        {ageGrp === 'Babies' && '0-2 yr'}
-                        {ageGrp === 'Children' && '3-12 yr'}
-                        {ageGrp === 'Teenagers' && '13-19 yr'}
-                        {ageGrp === 'Adults' && '20-59 yr'}
-                        {ageGrp === 'Seniors' && '60-100 yr'}
-                      </span>
+                      <div className="flex justify-between items-center text-xs">
+                        <span>{cohort.label}</span>
+                        <span className="text-[10px] font-mono text-slate-400">{cohort.range}</span>
+                      </div>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* Simulated Live Connection Stats */}
+            {/* Clinical Evidence Reference Box */}
             <div className="pt-2">
-              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
-                <div className="flex items-center gap-1.5 text-slate-700 font-bold text-[10px] uppercase">
-                  <Database className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Earth Data Servers</span>
+              <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3.5 space-y-2.5">
+                <div className="flex items-center gap-1.5 text-slate-800 font-bold text-[11px]">
+                  <BookOpen className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Evidence References</span>
                 </div>
-                <div className="space-y-1 text-[10px] text-slate-500 font-mono">
-                  <div className="flex justify-between border-b border-dashed border-slate-200 pb-1">
-                    <span>WHO Index Cache:</span>
-                    <span className="text-emerald-600 font-semibold font-sans">Syncing</span>
+                <div className="space-y-1.5 text-[10px] text-slate-600">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Formulary</span>
+                    <span className="font-semibold text-slate-800">WHO 23rd List</span>
                   </div>
-                  <div className="flex justify-between border-b border-dashed border-slate-200 pb-1">
-                    <span>Clinical trials:</span>
-                    <span className="text-slate-800">420 Million</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Geriatric Filter</span>
+                    <span className="font-semibold text-slate-800">AGS Beers 2023</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Last Refresh:</span>
-                    <span className="text-slate-800">2ms ago</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Nomenclature</span>
+                    <span className="font-semibold text-slate-800">ICD-11 Unified</span>
                   </div>
                 </div>
               </div>
@@ -426,15 +438,14 @@ export default function App() {
 
           {/* Operational Status Footer Card */}
           <div className="p-4 border-t border-slate-200 bg-slate-50/50">
-            <div className="bg-blue-600 rounded-xl p-4 text-white shadow-md">
-              <p className="text-[10px] font-medium opacity-80 uppercase tracking-widest">Aether AI Status</p>
-              <h4 className="text-base font-extrabold tracking-tight">Fully Operational</h4>
-              
-              <div className="mt-3 bg-white/20 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-white h-full w-[96%] animate-pulse"></div>
+            <div className="bg-slate-900 rounded-xl p-3.5 text-white">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Clinical Registry</span>
+                <span className="text-[9px] font-mono font-medium text-emerald-400">Verified</span>
               </div>
-              <p className="text-[9px] mt-2 opacity-90 leading-normal">
-                Connected with 4.2PB global medicine assets securely
+              <h4 className="text-xs font-bold text-slate-100">Decision Support Online</h4>
+              <p className="text-[10px] text-slate-400 mt-1 leading-normal">
+                Multi-specialty disease etiology, dosage safety, and real-time consultation desk.
               </p>
             </div>
           </div>
@@ -507,115 +518,111 @@ export default function App() {
               />
             </div>
 
-            {/* Earth Data Core Status Correlation */}
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm xl:col-span-7 flex flex-col justify-between">
+            {/* Clinical Biomarker Surveillance & Reference Ranges */}
+            <div className="bg-white p-5 rounded-xl border border-slate-200/90 shadow-xs xl:col-span-7 flex flex-col justify-between">
               <div>
-                <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <Cpu className="w-4.5 h-4.5 text-slate-500" />
-                    <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-tight">
-                      Earth-Node Correlation metrics <span className="text-slate-400 font-normal font-mono text-[10px] ml-1">Live streaming telemetry</span>
-                    </h3>
+                <div className="flex justify-between items-start mb-3 pb-3 border-b border-slate-100">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200/60">
+                        {activeSpecialty}
+                      </span>
+                      <h3 className="text-xs font-bold text-slate-900 tracking-tight">
+                        Physiological Biomarker Surveillance
+                      </h3>
+                    </div>
+                    <p className="text-[11px] text-slate-500 mt-1">
+                      Normative hemodynamic and metabolic intervals tailored for <strong className="text-slate-800 font-semibold">{activeAgeGroup}</strong> cohort.
+                    </p>
                   </div>
-                  <div className="flex gap-2">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span className="w-2 h-2 rounded-full bg-slate-200"></span>
+                  <div className="hidden sm:flex items-center gap-1.5 text-[10px] text-slate-500 font-medium">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Evidence-Grounded</span>
                   </div>
                 </div>
 
-                <p className="text-[11px] text-slate-500 italic mb-4">
-                  "AI is cross-referencing global database clusters for <span className="text-blue-600 font-bold">{activeSpecialty}</span> under patient parameters representing {activeAgeGroup}."
-                </p>
-
                 {/* Live EMR Vitals banner overlay once committed */}
                 {emrVitals && (
-                  <div className="mb-4 bg-emerald-50/70 border border-emerald-200/80 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-slate-800 animate-fade-in" id="active-emr-sensor-banner">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1 px-1.5 bg-emerald-600 rounded text-white text-[8px] font-mono font-bold uppercase tracking-wider">
-                        EMR ACTIVE
-                      </div>
+                  <div className="mb-4 bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-slate-800" id="active-emr-sensor-banner">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
                       <div>
-                        <span className="block text-[10px] font-extrabold text-slate-900 leading-none">
-                          Capillary Biometrics Synchronized
+                        <span className="block text-xs font-bold text-slate-900 leading-tight">
+                          Bedside Vitals Synchronized
                         </span>
-                        <span className="block text-[8.5px] text-slate-500 font-mono">
-                          Physiologic capture • {emrVitals.scannedAt}
+                        <span className="block text-[10px] text-slate-500 font-mono">
+                          Physiologic capture · {emrVitals.scannedAt}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4 text-xs font-semibold font-mono">
                       <div className="text-center">
-                        <span className="block text-[7.5px] text-slate-400 font-sans uppercase">Heart BPM</span>
-                        <span className="text-slate-900 font-extrabold font-mono">{emrVitals.bpm}</span>
+                        <span className="block text-[8px] text-slate-400 uppercase font-sans font-medium">Heart Rate</span>
+                        <span className="text-slate-900 font-bold tabular-nums">{emrVitals.bpm} <span className="text-[9px] font-normal text-slate-500">bpm</span></span>
                       </div>
                       <div className="text-center">
-                        <span className="block text-[7.5px] text-slate-400 font-sans uppercase">Oxygen SpO₂</span>
-                        <span className="text-blue-600 font-extrabold font-mono">{emrVitals.spo2}%</span>
+                        <span className="block text-[8px] text-slate-400 uppercase font-sans font-medium">Oxygen Sat</span>
+                        <span className="text-blue-700 font-bold tabular-nums">{emrVitals.spo2}<span className="text-[9px] font-normal text-slate-500">%</span></span>
                       </div>
                       <div className="text-center">
-                        <span className="block text-[7.5px] text-slate-400 font-sans uppercase">BP Pressure</span>
-                        <span className="text-slate-900 font-extrabold font-mono">{emrVitals.bpSystolic}/{emrVitals.bpDiastolic}</span>
+                        <span className="block text-[8px] text-slate-400 uppercase font-sans font-medium">Blood Pressure</span>
+                        <span className="text-slate-900 font-bold tabular-nums">{emrVitals.bpSystolic}/{emrVitals.bpDiastolic}</span>
                       </div>
                       <div className="text-center">
-                        <span className="block text-[7.5px] text-slate-400 font-sans uppercase">RBC M/µL</span>
-                        <span className="text-slate-900 font-extrabold font-mono">{emrVitals.rbcCount}</span>
+                        <span className="block text-[8px] text-slate-400 uppercase font-sans font-medium">RBC Count</span>
+                        <span className="text-slate-900 font-bold tabular-nums">{emrVitals.rbcCount} <span className="text-[9px] font-normal text-slate-500">M/µL</span></span>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* Telemetry dials mapping directly to specialty filters dynamically */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  <div className="space-y-1 p-2 bg-slate-50 rounded-lg border border-slate-100">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{telemetry.metricA.label}</p>
-                    <p className="text-lg font-extrabold text-slate-900 font-sans tracking-tight">{telemetry.metricA.val}</p>
-                    <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                      <div className={`h-full ${telemetry.metricA.color} rounded-full`} style={{ width: "80%" }}></div>
+                {/* Biomarker metric gauges */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-200/70">
+                    <span className="text-[10px] font-semibold text-slate-500 block truncate">{telemetry.metricA.label}</span>
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums block mt-0.5">{telemetry.metricA.val}</span>
+                    <div className="h-1.5 w-full bg-slate-200/80 rounded-full overflow-hidden mt-2">
+                      <div className="h-full bg-slate-900 rounded-full" style={{ width: "80%" }}></div>
                     </div>
                   </div>
 
-                  <div className="space-y-1 p-2 bg-slate-50 rounded-lg border border-slate-100">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{telemetry.metricB.label}</p>
-                    <p className="text-lg font-extrabold text-slate-900 font-sans tracking-tight">{telemetry.metricB.val}</p>
-                    <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                      <div className={`h-full ${telemetry.metricB.color} rounded-full`} style={{ width: "65%" }}></div>
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-200/70">
+                    <span className="text-[10px] font-semibold text-slate-500 block truncate">{telemetry.metricB.label}</span>
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums block mt-0.5">{telemetry.metricB.val}</span>
+                    <div className="h-1.5 w-full bg-slate-200/80 rounded-full overflow-hidden mt-2">
+                      <div className="h-full bg-slate-900 rounded-full" style={{ width: "65%" }}></div>
                     </div>
                   </div>
 
-                  <div className="space-y-1 p-2 bg-slate-50 rounded-lg border border-slate-100">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{telemetry.metricC.label}</p>
-                    <p className="text-lg font-extrabold text-slate-900 font-sans tracking-tight">{telemetry.metricC.val}</p>
-                    <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                      <div className={`h-full ${telemetry.metricC.color} rounded-full`} style={{ width: "25%" }}></div>
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-200/70">
+                    <span className="text-[10px] font-semibold text-slate-500 block truncate">{telemetry.metricC.label}</span>
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums block mt-0.5">{telemetry.metricC.val}</span>
+                    <div className="h-1.5 w-full bg-slate-200/80 rounded-full overflow-hidden mt-2">
+                      <div className="h-full bg-slate-900 rounded-full" style={{ width: "35%" }}></div>
                     </div>
                   </div>
 
-                  <div className="space-y-1 p-2 bg-slate-50 rounded-lg border border-slate-100">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{telemetry.metricD.label}</p>
-                    <p className="text-lg font-extrabold text-slate-900 font-sans tracking-tight">{telemetry.metricD.val}</p>
-                    <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
-                      <div className={`h-full ${telemetry.metricD.color} rounded-full`} style={{ width: "40%" }}></div>
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-200/70">
+                    <span className="text-[10px] font-semibold text-slate-500 block truncate">{telemetry.metricD.label}</span>
+                    <span className="text-base font-bold text-slate-900 font-mono tabular-nums block mt-0.5">{telemetry.metricD.val}</span>
+                    <div className="h-1.5 w-full bg-slate-200/80 rounded-full overflow-hidden mt-2">
+                      <div className="h-full bg-slate-900 rounded-full" style={{ width: "50%" }}></div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Informative nodes */}
+              {/* Clinical references footer */}
               <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap justify-between items-center text-[10px] text-slate-500 gap-2">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2.5 h-2.5 rounded bg-blue-100 border border-blue-400"></div> 
-                    <span>N-America Primary Load</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2.5 h-2.5 rounded bg-emerald-100 border border-emerald-400"></div> 
-                    <span>Asia-Pacific Cluster Node</span>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-400 font-mono">Classification:</span>
+                  <span className="font-medium text-slate-700">ICD-11 Unified Nomenclature</span>
+                  <span className="text-slate-300">·</span>
+                  <span className="font-medium text-slate-700">WHO Guidelines Reference</span>
                 </div>
-                <span className="font-mono text-[9px] bg-slate-100 px-1.5 p-0.5 rounded text-slate-600">
-                  Secure Server Farm Hash: 4A-9B-CERN
+                <span className="font-mono text-[9px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  Clinical Precision 99.4%
                 </span>
               </div>
             </div>
@@ -649,39 +656,39 @@ export default function App() {
               />
 
               {/* Life-Cycle demographic matrix based on selected filters */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-fit">
+              <div className="bg-white rounded-xl border border-slate-200/90 shadow-xs overflow-hidden flex flex-col h-fit">
                 
-                <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center shrink-0">
-                  <div className="flex items-center gap-1.5">
-                    <Plus className="w-4.5 h-4.5 text-blue-600" />
-                    <h4 className="text-xs font-bold text-slate-800 uppercase tracking-tight">
-                      Life-Cycle Clinical risk analysis ({activeSpecialty})
+                <div className="p-4 border-b border-slate-100 flex justify-between items-center shrink-0">
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-slate-700" />
+                    <h4 className="text-xs font-bold text-slate-900 tracking-tight">
+                      Life-Cycle Clinical Risk Profile ({activeSpecialty})
                     </h4>
                   </div>
-                  <span className="text-[9px] font-mono text-slate-400 uppercase">Interactive Node Feed</span>
+                  <span className="text-[10px] text-slate-400 font-medium">Consensus Criteria</span>
                 </div>
 
                 <div className="p-4 flex-1 overflow-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="text-[10px] text-slate-400 font-bold uppercase border-b border-slate-100">
-                        <th className="pb-2">Age Bracket</th>
-                        <th className="pb-2">Extracted Primary Concern</th>
-                        <th className="pb-2">Severity Check</th>
-                        <th className="pb-2 text-right">Cluster</th>
+                      <tr className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-100">
+                        <th className="pb-2 font-medium">Age Cohort</th>
+                        <th className="pb-2 font-medium">Primary Clinical Hazard</th>
+                        <th className="pb-2 font-medium">Risk Level</th>
+                        <th className="pb-2 text-right font-medium">Ref</th>
                       </tr>
                     </thead>
-                    <tbody className="text-[11px] font-semibold text-slate-700 divide-y divide-slate-50">
+                    <tbody className="text-xs text-slate-700 divide-y divide-slate-100/70">
                       {getRiskMatrix().map((row, i) => (
-                        <tr key={i} className="hover:bg-slate-50/50 transition">
-                          <td className="py-2.5 font-sans whitespace-nowrap">{row.age}</td>
-                          <td className="py-2.5 text-slate-600 pr-1.5">{row.risk}</td>
+                        <tr key={i} className="hover:bg-slate-50/60 transition">
+                          <td className="py-2.5 font-medium whitespace-nowrap text-slate-900">{row.age}</td>
+                          <td className="py-2.5 text-slate-600 pr-2">{row.risk}</td>
                           <td className="py-2.5">
-                            <span className={`px-2 py-0.5 border text-[9px] font-bold rounded-full ${row.severityColor}`}>
+                            <span className={`px-2 py-0.5 border text-[10px] font-semibold rounded ${row.severityColor}`}>
                               {row.severity}
                             </span>
                           </td>
-                          <td className="py-2.5 text-right font-mono text-[9px] text-slate-450">{row.node}</td>
+                          <td className="py-2.5 text-right font-mono text-[10px] text-slate-400">{row.node}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -689,38 +696,35 @@ export default function App() {
                 </div>
 
                 {/* Status metrics footer info bar */}
-                <div className="p-3 bg-slate-900 text-slate-400 text-[10px] flex justify-between items-center shrink-0">
-                  <span className="flex items-center gap-1 leading-none">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping inline-block"></span>
-                    Active Earth Sync: Continuous Stream
-                  </span>
-                  <span className="text-blue-400 font-semibold uppercase hover:underline cursor-pointer">
-                    Data Registry: CERN-WHO-NCI
+                <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-slate-500 text-[10px] flex justify-between items-center shrink-0 font-medium">
+                  <span>Epidemiologic Mapping: Continuous Sync</span>
+                  <span className="font-mono text-slate-600">
+                    Database: WHO / ICD-11
                   </span>
                 </div>
 
               </div>
 
               {/* Timestamped Sequence of Medical Filters History Drawer */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-fit animate-fade-in" id="filter-history-drawer">
+              <div className="bg-white rounded-xl border border-slate-200/90 shadow-xs overflow-hidden flex flex-col h-fit" id="filter-history-drawer">
                 <button
                   type="button"
                   onClick={() => setIsHistoryExpanded(!isHistoryExpanded)}
-                  className="w-full text-left p-4 bg-slate-50/50 flex justify-between items-center outline-none transition duration-150 hover:bg-slate-100/50"
+                  className="w-full text-left p-3.5 bg-white flex justify-between items-center outline-none transition duration-150 hover:bg-slate-50 cursor-pointer"
                 >
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-indigo-500 animate-pulse" />
+                  <div className="flex items-center gap-2.5">
+                    <Clock className="w-4 h-4 text-slate-500" />
                     <div>
-                      <h4 className="text-xs font-bold text-slate-800 uppercase tracking-tight">
+                      <h4 className="text-xs font-bold text-slate-900 tracking-tight">
                         Session Filter Audit Log
                       </h4>
-                      <p className="text-[10px] text-slate-400 font-medium leading-none mt-0.5">
-                        {filterHistory.length === 1 ? '1 state' : `${filterHistory.length} states`} logged this session
+                      <p className="text-[10px] text-slate-500 font-medium leading-none mt-0.5">
+                        {filterHistory.length === 1 ? '1 filter state' : `${filterHistory.length} states`} recorded
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 font-sans">
-                    <span className="text-[9px] font-mono bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-bold uppercase tracking-tight">
+                    <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-semibold">
                       {isHistoryExpanded ? 'Collapse' : 'Expand'}
                     </span>
                   </div>

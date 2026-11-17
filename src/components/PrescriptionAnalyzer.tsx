@@ -218,18 +218,18 @@ function cleanErrorMessage(raw: string): string {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-[11px] flex items-center justify-center gap-1.5 shadow-sm transition disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-1.5 px-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 shadow-xs transition disabled:opacity-50 cursor-pointer"
                 id="btn-submit-rx"
               >
                 {loading ? (
                   <>
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    Analyzing Compounds...
+                    Screening Pharmacology...
                   </>
                 ) : (
                   <>
                     <Play className="w-3.5 h-3.5" />
-                    AI Parse Medication
+                    Analyze Prescription
                   </>
                 )}
               </button>
@@ -346,45 +346,44 @@ function cleanErrorMessage(raw: string): string {
                 </div>
               </div>
 
-              {/* Extracted medicine capsules */}
+              {/* Extracted medicine compounds */}
               <div>
-                <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Detected Clinical Compounds</span>
+                <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Identified Pharmaceutical Regimen</span>
                 <div className="space-y-2">
                   {result.detectedMedicines.map((med, idx) => (
-                    <div key={idx} className="p-2.5 bg-white border border-slate-200 rounded-lg flex flex-col gap-1 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                    <div key={idx} className="p-3 bg-white border border-slate-200 rounded-xl flex flex-col gap-1.5 shadow-2xs">
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-800 text-xs flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                        <span className="font-bold text-slate-900 text-xs">
                           {med.name}
                         </span>
-                        <span className="font-mono text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 rounded">
-                          {med.dosageStrength} - {med.frequency}
+                        <span className="font-mono text-[10px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                          {med.dosageStrength} · {med.frequency}
                         </span>
                       </div>
                       
                       {med.description && (
-                        <p className="text-[10px] text-slate-500 leading-normal italic">"{med.description}"</p>
+                        <p className="text-[11px] text-slate-600 leading-normal">{med.description}</p>
                       )}
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1 pt-1.5 border-t border-slate-50 text-[10px]">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-1 pt-2 border-t border-slate-100 text-[11px]">
                         <div>
-                          <span className="font-semibold text-rose-700 flex items-center gap-1">
-                            ⚠️ Risks & Side-Effects
+                          <span className="font-semibold text-rose-800 block text-[10px] uppercase tracking-wide">
+                            Safety & Adverse Reactions
                           </span>
                           <span className="text-slate-600 block mt-0.5">{med.risksOrSideEffects.join(', ')}</span>
                         </div>
                         <div>
-                          <span className="font-semibold text-slate-800 flex items-center gap-1">
-                            👶👵 Age Appropriateness ({result.patientAgeGroup})
+                          <span className="font-semibold text-slate-800 block text-[10px] uppercase tracking-wide">
+                            Cohort Appropriateness ({result.patientAgeGroup})
                           </span>
                           <span className="text-slate-600 block mt-0.5">{med.ageAppropriateNotes}</span>
                         </div>
                       </div>
 
                       {med.specialtyInsight && (
-                        <div className="mt-1 p-1 bg-indigo-50/50 rounded text-[9px] text-indigo-700 flex gap-1 items-start">
-                          <CornerDownRight className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                          <span><strong className="font-bold">{result.specialtyContext} Insight:</strong> {med.specialtyInsight}</span>
+                        <div className="mt-1.5 p-2 bg-slate-50 rounded-lg text-[11px] text-slate-700 flex gap-2 items-start border border-slate-150">
+                          <CornerDownRight className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                          <span><strong className="font-semibold text-slate-900">{result.specialtyContext} Note:</strong> {med.specialtyInsight}</span>
                         </div>
                       )}
                     </div>
@@ -393,29 +392,29 @@ function cleanErrorMessage(raw: string): string {
               </div>
 
               {/* Interaction warning */}
-              <div className="p-2.5 bg-yellow-50/60 border border-yellow-200/50 rounded-lg space-y-1">
-                <span className="font-bold text-yellow-800 text-[10px] flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-yellow-600" />
-                  Drug-to-Drug Interaction Matrix Check
+              <div className="p-3 bg-amber-50/70 border border-amber-200/70 rounded-xl space-y-1">
+                <span className="font-bold text-amber-900 text-xs flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-amber-700" />
+                  Drug-to-Drug Interaction Screening
                 </span>
-                <p className="text-[10px] text-slate-600 leading-normal">{result.drugInteractionsCheck}</p>
+                <p className="text-[11px] text-amber-900/80 leading-relaxed">{result.drugInteractionsCheck}</p>
               </div>
 
               {/* Instructions summary */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10px] bg-slate-100/60 p-2.5 rounded-lg border border-slate-200/30">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-xl border border-slate-200/70">
                 <div>
-                  <span className="font-bold text-slate-700 block">Pharmacist Precautions</span>
-                  <p className="text-slate-600 mt-0.5 leading-relaxed">{result.generalPrecautions}</p>
+                  <span className="font-semibold text-slate-900 block mb-0.5">Dispensing Precautions</span>
+                  <p className="text-slate-600 text-[11px] leading-relaxed">{result.generalPrecautions}</p>
                 </div>
                 <div>
-                  <span className="font-bold text-slate-700 block">Administration Advice</span>
-                  <p className="text-slate-600 mt-0.5 leading-relaxed">{result.doctorInstructions}</p>
+                  <span className="font-semibold text-slate-900 block mb-0.5">Clinical Administration</span>
+                  <p className="text-slate-600 text-[11px] leading-relaxed">{result.doctorInstructions}</p>
                 </div>
               </div>
 
               {/* Specialty Relevance */}
-              <div className="p-2 bg-blue-50/50 border border-blue-200/40 rounded-lg text-[9px] text-blue-800">
-                <strong className="font-bold">Inter-departmental Cardiology / Hematology / Neurology Sync Rank: </strong>
+              <div className="p-2.5 bg-slate-100 rounded-lg text-[10px] text-slate-700 font-medium">
+                <span className="text-slate-500">Cross-Specialty Correlation: </span>
                 {result.relevanceToSpecialty}
               </div>
             </div>
